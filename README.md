@@ -1,70 +1,160 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# **Server Time React Application**
 
-## Available Scripts
+## **Project Overview**
 
-In the project directory, you can run:
+This React application fetches the current server time from an API and displays it on the webpage. The time is automatically refreshed every 5 seconds. This project demonstrates the use of React hooks (`useState`, `useEffect`) and how to handle asynchronous API calls using the Fetch API. Users can replace the API URL with their own local or remote API endpoint.
 
-### `npm start`
+## **Installation**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### **1. Clone the repository**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To get started, clone the project repository:
 
-### `npm test`
+```bash
+git clone https://github.com/JiayiWu-MobilePractice/server-time-app.git
+cd server-time-app
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **2. Install dependencies**
 
-### `npm run build`
+Install the required dependencies by running the following command in your project directory:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### **3. Start the React application**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run the React application, execute the following command:
 
-### `npm run eject`
+```bash
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This will start the development server and open the application in your default browser.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## **Project Structure**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+server-time-app/
+├── public/
+│   ├── index.html
+├── src/
+│   ├── App.js
+│   ├── App.css
+│   ├── index.js
+├── package.json
+├── README.md
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **App.js**: The main component of the project, responsible for fetching and displaying server time.
+- **App.css**: The CSS file for styling the application.
+- **index.js**: The entry point of the application that renders the `App` component.
+- **package.json**: Includes metadata about the project and dependencies.
 
-## Learn More
+## **Functionality**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Fetch Server Time**: The application fetches the server time from a specified API URL, which can be replaced by the user with their own local or remote server.
+- **Format Time**: The fetched server time is formatted using `Intl.DateTimeFormat` for easy reading.
+- **Auto-Refresh**: The time is updated automatically every 5 seconds using `setInterval`.
+- **Error Handling**: If there's an issue fetching the time, an error message is displayed.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Code Overview
 
-### Code Splitting
+Here’s a breakdown of the key functionality in `App.js`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. **State Management**:
+   - `serverTime`: Holds the current server time as a string.
+   - `error`: Holds any error messages if fetching the server time fails.
 
-### Analyzing the Bundle Size
+2. **Fetch Server Time**: The `fetchServerTime` function makes an asynchronous call to the API, parses the returned JSON, and formats the time.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+3. **Formatting Time**: The `formatServerTime` function formats the server time using `Intl.DateTimeFormat` to display it in a user-friendly format.
 
-### Making a Progressive Web App
+4. **Auto-Refresh**: The `useEffect` hook sets up an interval to fetch the server time every 5 seconds. It cleans up the interval when the component unmounts.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+useEffect(() => {
+  fetchServerTime();
+  const intervalId = setInterval(fetchServerTime, 5000); // Refresh every 5 seconds
+  return () => clearInterval(intervalId); // Cleanup on component unmount
+}, []);
+```
 
-### Advanced Configuration
+## **API Information**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+By default, the application fetches server time from a local API hosted on `http://10.0.0.189:3000/time`. However, **users can replace this URL with their own local or remote API endpoint** in the `fetchServerTime` function inside `App.js`.
 
-### Deployment
+### **How to Replace the API Endpoint**:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Open the `App.js` file in your project.
+2. Find the following line in the `fetchServerTime` function:
 
-### `npm run build` fails to minify
+   ```javascript
+   const response = await fetch('http://10.0.0.189:3000/time'); // Local IP address
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. Replace `'http://10.0.0.189:3000/time'` with the URL of your own local or remote API.
+
+   For example:
+
+   ```javascript
+   const response = await fetch('http://localhost:3000/time'); // Example for local setup
+   ```
+
+4. Ensure that your API returns a response in the following format:
+
+```json
+{
+  "time": "2024-09-02T12:34:56Z"
+}
+```
+
+## **Dependencies**
+
+The following dependencies are required to run this application:
+
+- **React**: The main JavaScript framework for building the UI.
+- **Fetch API**: Used to make HTTP requests to fetch server time.
+- **Intl.DateTimeFormat**: JavaScript built-in object used for formatting dates.
+
+### Full List of Dependencies in `package.json`:
+
+```json
+{
+  "name": "server-time-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
